@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="az" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="page_title">Maga Solutions | AI Avtomatlaşdırma Agentliyi</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Comfortaa', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            light: '#245be8',
+                            mid: '#1f349c',
+                            dark: '#1b155e',
+                            black: '#0b0f19',
+                        }
+                    },
+                    backgroundImage: {
+                        'brand-gradient': 'linear-gradient(180deg, #245be8 0%, #1f349c 50%, #1b155e 100%)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0b0f19;
+            color: #ffffff;
+            font-family: 'Comfortaa', sans-serif;
+            overflow-x: hidden; /* Mobil cihazlarda yana sürüşmənin qarşısını almaq üçün */
+        }
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .glow-btn {
+            background: linear-gradient(180deg, #245be8, #1f349c);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .glow-btn:hover {
+            box-shadow: 0 0 20px rgba(36, 91, 232, 0.6);
+            transform: translateY(-2px);
+        }
+        .accordion-content {
+            transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+        .accordion-content.open {
+            max-height: 500px;
+            opacity: 1;
+        }
+        /* Pain & Gain Section Style */
+        .pain-card { border-left: 4px solid #ef4444; }
+        .gain-card { border-left: 4px solid #22c55e; }
+        
+        /* Tech Stack Logo Style */
+        .tech-badge {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            color: #cbd5e1;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .tech-badge:hover {
+            background: rgba(36, 91, 232, 0.2);
+            border-color: #245be8;
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-brand-light selection:text-white">
+
+    <nav class="fixed w-full z-50 top-0 bg-[#0b0f19]/90 backdrop-blur-md border-b border-white/5 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex items-center justify-between h-20">
+                <a href="#" class="flex items-center gap-3 group">
+                    <div class="w-10 h-10 flex items-center justify-center">
+                        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full text-brand-light group-hover:rotate-180 transition duration-700">
+                            <circle cx="50" cy="10" r="6" fill="currentColor" fill-opacity="1.0"/>
+                            <circle cx="73" cy="17" r="5.5" fill="currentColor" fill-opacity="0.95"/>
+                            <circle cx="90" cy="35" r="5" fill="currentColor" fill-opacity="0.9"/>
+                            <circle cx="95" cy="60" r="4.5" fill="currentColor" fill-opacity="0.85"/>
+                            <circle cx="85" cy="80" r="4" fill="currentColor" fill-opacity="0.8"/>
+                            <circle cx="65" cy="93" r="3.5" fill="currentColor" fill-opacity="0.75"/>
+                            <circle cx="40" cy="95" r="3" fill="currentColor" fill-opacity="0.7"/>
+                            <circle cx="20" cy="85" r="2.5" fill="currentColor" fill-opacity="0.65"/>
+                            <circle cx="8" cy="65" r="2" fill="currentColor" fill-opacity="0.6"/>
+                            <circle cx="5" cy="40" r="1.5" fill="currentColor" fill-opacity="0.55"/>
+                            <circle cx="15" cy="20" r="1.5" fill="currentColor" fill-opacity="0.5"/>
+                        </svg>
+                    </div>
+                    <div class="flex flex-col leading-none">
+                        <span class="text-xl font-bold tracking-tight text-white">maga</span>
+                        <span class="text-sm font-light tracking-widest text-brand-light lowercase">solutions</span>
+                    </div>
+                </a>
+
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#about" class="text-sm font-medium text-gray-300 hover:text-white transition" data-i18n="nav_about">Haqqımızda</a>
+                    <a href="#pain" class="text-sm font-medium text-gray-300 hover:text-white transition" data-i18n="nav_why">Niyə Biz?</a>
+                    <a href="#services" class="text-sm font-medium text-gray-300 hover:text-white transition" data-i18n="nav_services">Həllər</a>
+                    <a href="#faq" class="text-sm font-medium text-gray-300 hover:text-white transition">FAQ</a>
+                    
+                    <div class="flex gap-2 bg-white/5 px-2 py-1 rounded-full">
+                        <button onclick="setLanguage('az')" class="text-xs font-bold px-2 py-1 rounded hover:text-brand-light transition text-white" id="btn-az">AZ</button>
+                        <span class="text-gray-600">|</span>
+                        <button onclick="setLanguage('en')" class="text-xs font-bold px-2 py-1 rounded hover:text-brand-light transition text-gray-400" id="btn-en">EN</button>
+                    </div>
+
+                    <a href="https://wa.me/994998789799" target="_blank" class="glow-btn text-white px-6 py-2.5 rounded-full font-bold text-sm">
+                        <i class="fa-brands fa-whatsapp mr-2"></i><span data-i18n="nav_contact">Əlaqə</span>
+                    </a>
+                </div>
+
+                <div class="md:hidden flex items-center gap-4">
+                    <div class="flex gap-2 bg-white/5 px-2 py-1 rounded-full">
+                        <button onclick="setLanguage('az')" class="text-xs font-bold px-1 rounded hover:text-brand-light transition text-white" id="btn-az-mob">AZ</button>
+                        <span class="text-gray-600">|</span>
+                        <button onclick="setLanguage('en')" class="text-xs font-bold px-1 rounded hover:text-brand-light transition text-gray-400" id="btn-en-mob">EN</button>
+                    </div>
+                    <button onclick="toggleMobileMenu()" class="text-white focus:outline-none">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden absolute top-20 left-0 w-full bg-[#0b0f19]/95 backdrop-blur-xl border-b border-white/10 flex-col items-center py-6 space-y-6 shadow-2xl">
+            <a href="#about" onclick="toggleMobileMenu()" class="text-lg font-medium text-gray-300 hover:text-white transition" data-i18n="nav_about">Haqqımızda</a>
+            <a href="#pain" onclick="toggleMobileMenu()" class="text-lg font-medium text-gray-300 hover:text-white transition" data-i18n="nav_why">Niyə Biz?</a>
+            <a href="#services" onclick="toggleMobileMenu()" class="text-lg font-medium text-gray-300 hover:text-white transition" data-i18n="nav_services">Həllər</a>
+            <a href="#faq" onclick="toggleMobileMenu()" class="text-lg font-medium text-gray-300 hover:text-white transition">FAQ</a>
+            <a href="https://wa.me/994998789799" target="_blank" class="glow-btn text-white px-8 py-3 rounded-full font-bold text-sm w-max">
+                <i class="fa-brands fa-whatsapp mr-2"></i><span data-i18n="nav_contact">Əlaqə</span>
+            </a>
+        </div>
+    </nav>
+
+    <header class="relative pt-32 pb-20 lg:pt-52 lg:pb-32 overflow-hidden px-4">
+        <div class="absolute top-0 left-0 w-full h-[600px] bg-brand-gradient opacity-10 skew-y-6 transform origin-top-left -z-10 blur-3xl"></div>
+        
+        <div class="max-w-5xl mx-auto text-center reveal active">
+            <h1 class="text-4xl sm:text-5xl md:text-7xl font-bold mb-6 md:mb-8 leading-tight tracking-tight">
+                <span data-i18n="hero_title_1">Biznesinizi</span> <br class="hidden sm:block"> 
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-light to-blue-300" data-i18n="hero_highlight">Süni İntellektlə</span> 
+                <span data-i18n="hero_title_2">Böyüdün.</span>
+            </h1>
+            
+            <p class="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10 md:mb-12 font-light px-2" data-i18n="hero_desc">
+                Rutin işləri bizə tapşırın, siz strategiyaya fokuslanın. Maga Solutions sizin biznesinizi 24/7 işləyən bir sistemə çevirir.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row justify-center gap-4 sm:gap-5 px-4">
+                <a href="https://wa.me/994998789799" class="glow-btn text-white text-base md:text-lg px-8 py-4 rounded-full font-bold shadow-lg shadow-blue-900/50 w-full sm:w-auto">
+                    <span data-i18n="hero_btn_1">Pulsuz Konsultasiya</span>
+                </a>
+                <a href="#services" class="border border-white/20 hover:bg-white/5 text-white text-base md:text-lg px-8 py-4 rounded-full transition duration-300 bg-white/5 backdrop-blur-sm w-full sm:w-auto">
+                    <span data-i18n="hero_btn_2">Xidmətləri Kəşf Et</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <section id="about" class="py-20 md:py-24 bg-black/20 px-4">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
+                <div class="reveal">
+                    <h2 class="text-3xl font-bold mb-6 flex items-center gap-3">
+                        <i class="fa-solid fa-fingerprint text-brand-light"></i> <span data-i18n="about_title">Biz Kimik?</span>
+                    </h2>
+                    <p class="text-gray-400 leading-relaxed mb-6 text-base md:text-lg" data-i18n="about_p1">
+                        Maga Solutions, Azərbaycanda bizneslərin rəqəmsal transformasiyasını sürətləndirmək üçün yaradılmış yeni nəsil texnologiya agentliyidir.
+                    </p>
+                    <p class="text-gray-400 leading-relaxed mb-8 text-base md:text-lg" data-i18n="about_p2">
+                        Biz sadəcə kod yazmırıq. Biz sizin biznesinizin axsadığı nöqtələri tapır, <span class="text-white font-bold">Antigravity</span> və <span class="text-white font-bold">n8n</span> kimi qabaqcıl alətlərlə o boşluqları doldururuq.
+                    </p>
+                    
+                    <div class="grid grid-cols-2 gap-4 md:gap-6 border-t border-white/10 pt-8">
+                        <div>
+                            <div class="text-2xl font-bold text-brand-light">24/7</div>
+                            <div class="text-xs text-gray-500 mt-1 uppercase tracking-wide" data-i18n="stat_1">Sistem İşləkliyi</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-bold text-brand-light">%100</div>
+                            <div class="text-xs text-gray-500 mt-1 uppercase tracking-wide" data-i18n="stat_2">Məxfilik</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-bold text-brand-light">%100</div>
+                            <div class="text-xs text-gray-500 mt-1 uppercase tracking-wide" data-i18n="stat_3">Nəticəyə Zəmanət</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-bold text-brand-light">16</div>
+                            <div class="text-xs text-gray-500 mt-1 uppercase tracking-wide" data-i18n="stat_4">Tamamlanmış Proyekt</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="relative reveal delay-200 flex justify-center mt-8 md:mt-0">
+                    <img src="avtomatlashdirma.png" alt="Sistemli Yanaşma" class="max-w-full h-auto drop-shadow-[0_0_50px_rgba(36,91,232,0.3)]">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pain" class="py-20 md:py-24 relative px-4">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-12 md:mb-16 reveal">
+                <h2 class="text-3xl font-bold mb-4" data-i18n="pain_title">Problem və Həll</h2>
+                <p class="text-gray-400" data-i18n="pain_subtitle">Biznesinizdəki problemləri dəqiq həllərlə aradan qaldırırıq.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="glass pain-card p-6 md:p-8 rounded-2xl reveal">
+                    <h3 class="text-lg md:text-xl font-bold mb-6 text-red-400 flex items-center gap-2">
+                        <i class="fa-solid fa-triangle-exclamation"></i> <span data-i18n="pain_head">Sizin Problemlər</span>
+                    </h3>
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="text-white font-bold mb-1" data-i18n="pain_1_t">Yüksək İşçi Xərcləri</h4>
+                            <p class="text-sm text-gray-400" data-i18n="pain_1_d">Rutin işləri görmək üçün əlavə işçilərə yüksək maaşlar ödəyirsiniz.</p>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-bold mb-1" data-i18n="pain_2_t">Müştəri İtkisi</h4>
+                            <p class="text-sm text-gray-400" data-i18n="pain_2_d">Mesajlara və zənglərə gec cavab verildiyi üçün müştərilər rəqiblərə üz tutur.</p>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-bold mb-1" data-i18n="pain_3_t">İnsan Xətaları</h4>
+                            <p class="text-sm text-gray-400" data-i18n="pain_3_d">Məlumatların daxil edilməsində, fakturalarda və təqiblərdə unudulmalar olur.</p>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-bold mb-1" data-i18n="pain_4_t">İş Saatı Limitləri</h4>
+                            <p class="text-sm text-gray-400" data-i18n="pain_4_d">Komandanız yorulur, fasiləyə və istirahət günlərinə ehtiyac duyur.</p>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-bold mb-1" data-i18n="pain_5_t">İdarəetmə Xaosu</h4>
+                            <p class="text-sm text-gray-400" data-i18n="pain_5_d">Biznesi böyütmək istəyərkən əməliyyatların çoxalması sistemi çökdürür.</p>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-bold mb-1" data-i18n="pain_6_t">Gecikən Ödənişlər</h4>
+                            <p class="text-sm text-gray-400" data-i18n="pain_6_d">Müştərilərə borcları xatırlatmaq unudulur, nağd pul axını pozulur.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass gain-card p-6 md:p-8 rounded-2xl reveal delay-100 bg-white/5">
+                    <h3 class="text-lg md:text-xl font-bold mb-6 text-green-400 flex items-center gap-2">
+                        <i class="fa-solid fa-check-circle"></i> <span data-i18n="gain_head">Maga Solutions Həlli</span>
+                    </h3>
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="text-white font-bold mb-1" data-i18n="gain_1_t">Xərclərin Optimizasiyası</h4>
+                            <p class="text-sm text-gray-400" data-i18n="gain_1_d">AI agentlər tək bir maaşdan qat-qat ucuz qiymətə 3 nəfərin işini görür.</p>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-bold mb-1" data-i18n="gain_2_t">Anında Cavablandırma</h4>
+                            <p class="text-sm text-gray-400" data-i18n="gain_2_d">Ağıllı botlar hər bir müştəriyə saniyələr içində cavab verir və satışı bağlayır.</p>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-bold mb-1" data-i18n="gain_3_t">İnsan Xətalarının 0-a Endirilməsi</h4>
+                            <p class="text-sm text-gray-400" data-i18n="gain_3_d">Avtomatlaşdırılmış sistemlər 100% dəqiqliklə işləyir, heç nə unudulmur.</p>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-bold mb-1" data-i18n="gain_4_t">AI Yorulmur, Fasiləyə Ehtiyac Duymur</h4>
+                            <p class="text-sm text-gray-400" data-i18n="gain_4_d">Sisteminiz 24/7 işləyir, bayramlarda və ya gecə saatlarında belə dayanmır.</p>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-bold mb-1" data-i18n="gain_5_t">Biznes Böyütmək Üçün Fürsət</h4>
+                            <p class="text-sm text-gray-400" data-i18n="gain_5_d">Siz yalnız strategiyaya fokuslanırsınız, sistem artan tələbatı asanlıqla idarə edir.</p>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-bold mb-1" data-i18n="gain_6_t">Ödənişlər Vaxtında Yığılır</h4>
+                            <p class="text-sm text-gray-400" data-i18n="gain_6_d">Fakturalar avtomatik göndərilir və müştərilərə xatırlatmalar vaxtında edilir.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="services" class="py-20 md:py-24 relative px-4">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-12 md:mb-16 reveal">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4" data-i18n="srv_title">Xaosdan Sistemə Keçid</h2>
+                <p class="text-gray-400" data-i18n="srv_subtitle">Biznesinizi köhnə üsullarla idarə etməyi dayandırın.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6 md:gap-8">
+                <div class="glass p-6 md:p-8 rounded-3xl hover:border-brand-light/50 transition duration-300 group reveal">
+                    <div class="w-12 h-12 rounded-xl bg-brand-mid/20 flex items-center justify-center text-brand-light text-2xl mb-6 group-hover:scale-110 transition">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3" data-i18n="s1_t">AI Agentlər</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-4" data-i18n="s1_d">
+                        Müştərilərinizlə 3 saniyə ərzində əlaqə quran, sualları cavablandıran və satış edən ağıllı köməkçilər.
+                    </p>
+                </div>
+
+                <div class="glass p-6 md:p-8 rounded-3xl hover:border-brand-light/50 transition duration-300 group reveal delay-100">
+                    <div class="w-12 h-12 rounded-xl bg-brand-mid/20 flex items-center justify-center text-brand-light text-2xl mb-6 group-hover:scale-110 transition">
+                        <i class="fa-solid fa-gears"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3" data-i18n="s2_t">Workflow Avtomatlaşdırma</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-4" data-i18n="s2_d">
+                        Fakturaların göndərilməsi, e-mail marketinq və ya cədvəl yeniləmələri – hamısı avtomatik.
+                    </p>
+                </div>
+
+                <div class="glass p-6 md:p-8 rounded-3xl hover:border-brand-light/50 transition duration-300 group reveal delay-200">
+                    <div class="w-12 h-12 rounded-xl bg-brand-mid/20 flex items-center justify-center text-brand-light text-2xl mb-6 group-hover:scale-110 transition">
+                        <i class="fa-solid fa-database"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3" data-i18n="s3_t">CRM İnteqrasiyası</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-4" data-i18n="s3_d">
+                        Müştəri məlumatlarını itirməyin. Leadlərin haradan gəldiyini və nə istədiyini tək paneldən izləyin.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-16 md:py-20 bg-black/40 border-t border-b border-white/5 px-4">
+        <div class="max-w-7xl mx-auto text-center reveal">
+            <h2 class="text-2xl font-bold mb-8 md:mb-10 text-gray-300" data-i18n="tech_title">İstifadə Etdiyimiz Texnologiyalar</h2>
+            <div class="flex flex-wrap justify-center gap-3 md:gap-4">
+                <div class="tech-badge text-sm md:text-base"><i class="fa-solid fa-bolt"></i> n8n</div>
+                <div class="tech-badge text-sm md:text-base"><i class="fa-solid fa-diagram-project"></i> Make.com</div>
+                <div class="tech-badge text-sm md:text-base"><i class="fa-solid fa-plug"></i> Zapier</div>
+                <div class="tech-badge text-sm md:text-base"><i class="fa-solid fa-microchip"></i> Antigravity</div>
+                <div class="tech-badge text-sm md:text-base"><i class="fa-solid fa-brain"></i> OpenAI</div>
+                <div class="tech-badge text-sm md:text-base"><i class="fa-solid fa-sparkles"></i> Gemini</div>
+                <div class="tech-badge text-sm md:text-base"><i class="fa-solid fa-cube"></i> Claude</div>
+                <div class="tech-badge text-sm md:text-base"><i class="fa-solid fa-waveform-lines"></i> ElevenLabs</div>
+                <div class="tech-badge text-sm md:text-base"><i class="fa-solid fa-table"></i> Airtable</div>
+                <div class="tech-badge text-sm md:text-base"><i class="fa-solid fa-file-excel"></i> Google Sheets</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="faq" class="py-20 md:py-24 bg-[#080b12] px-4">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-10 md:mb-12 reveal" data-i18n="faq_title">Tez-Tez Verilən Suallar</h2>
+            
+            <div class="space-y-4">
+                <div class="glass rounded-2xl overflow-hidden reveal">
+                    <button class="w-full px-4 md:px-6 py-4 md:py-5 text-left flex justify-between items-center focus:outline-none" onclick="toggleAccordion(this)">
+                        <span class="font-bold text-sm md:text-base pr-4" data-i18n="faq_1_q">Mənim biznesim üçün uyğundurmu?</span>
+                        <i class="fa-solid fa-chevron-down text-brand-light transition-transform duration-300 flex-shrink-0"></i>
+                    </button>
+                    <div class="accordion-content px-4 md:px-6 bg-white/5">
+                        <p class="py-4 text-gray-400 text-sm" data-i18n="faq_1_a">Bəli, istər kiçik kurs, istər restoran, istərsə də onlayn mağaza olun. Təkrarlanan işləriniz varsa, avtomatlaşdırma sizə vaxt və pul qazandıracaq.</p>
+                    </div>
+                </div>
+                <div class="glass rounded-2xl overflow-hidden reveal">
+                    <button class="w-full px-4 md:px-6 py-4 md:py-5 text-left flex justify-between items-center focus:outline-none" onclick="toggleAccordion(this)">
+                        <span class="font-bold text-sm md:text-base pr-4" data-i18n="faq_2_q">Qiymətlər necədir?</span>
+                        <i class="fa-solid fa-chevron-down text-brand-light transition-transform duration-300 flex-shrink-0"></i>
+                    </button>
+                    <div class="accordion-content px-4 md:px-6 bg-white/5">
+                        <p class="py-4 text-gray-400 text-sm" data-i18n="faq_2_a">Biz paket və fərdi həllər təklif edirik. İlk konsultasiya tamamilə pulsuzdur, orada sizin ehtiyacınıza uyğun qiymət təyin olunur.</p>
+                    </div>
+                </div>
+                <div class="glass rounded-2xl overflow-hidden reveal">
+                    <button class="w-full px-4 md:px-6 py-4 md:py-5 text-left flex justify-between items-center focus:outline-none" onclick="toggleAccordion(this)">
+                        <span class="font-bold text-sm md:text-base pr-4" data-i18n="faq_3_q">Quraşdırma nə qədər vaxt aparır?</span>
+                        <i class="fa-solid fa-chevron-down text-brand-light transition-transform duration-300 flex-shrink-0"></i>
+                    </button>
+                    <div class="accordion-content px-4 md:px-6 bg-white/5">
+                        <p class="py-4 text-gray-400 text-sm" data-i18n="faq_3_a">Sadə botlar üçün 2-3 gün, kompleks CRM sistemləri üçün isə 7-14 gün tələb oluna bilər.</p>
+                    </div>
+                </div>
+                <div class="glass rounded-2xl overflow-hidden reveal">
+                    <button class="w-full px-4 md:px-6 py-4 md:py-5 text-left flex justify-between items-center focus:outline-none" onclick="toggleAccordion(this)">
+                        <span class="font-bold text-sm md:text-base pr-4" data-i18n="faq_4_q">Məlumatlarım təhlükəsizdirmi?</span>
+                        <i class="fa-solid fa-chevron-down text-brand-light transition-transform duration-300 flex-shrink-0"></i>
+                    </button>
+                    <div class="accordion-content px-4 md:px-6 bg-white/5">
+                        <p class="py-4 text-gray-400 text-sm" data-i18n="faq_4_a">Əlbəttə! Bütün müştəri məlumatları rəsmi API-lər vasitəsilə şifrələnərək ötürülür və 100% məxfilik qorunur.</p>
+                    </div>
+                </div>
+                <div class="glass rounded-2xl overflow-hidden reveal">
+                    <button class="w-full px-4 md:px-6 py-4 md:py-5 text-left flex justify-between items-center focus:outline-none" onclick="toggleAccordion(this)">
+                        <span class="font-bold text-sm md:text-base pr-4" data-i18n="faq_5_q">Texniki biliyə ehtiyacım varmı?</span>
+                        <i class="fa-solid fa-chevron-down text-brand-light transition-transform duration-300 flex-shrink-0"></i>
+                    </button>
+                    <div class="accordion-content px-4 md:px-6 bg-white/5">
+                        <p class="py-4 text-gray-400 text-sm" data-i18n="faq_5_a">Xeyr. Biz bütün texniki quraşdırmanı və idarəetməni öz üzərimizə götürürük. Sizə yalnız hazır sistemi istifadə etmək qalır.</p>
+                    </div>
+                </div>
+                <div class="glass rounded-2xl overflow-hidden reveal">
+                    <button class="w-full px-4 md:px-6 py-4 md:py-5 text-left flex justify-between items-center focus:outline-none" onclick="toggleAccordion(this)">
+                        <span class="font-bold text-sm md:text-base pr-4" data-i18n="faq_6_q">Hansı platformalarla inteqrasiya edirsiniz?</span>
+                        <i class="fa-solid fa-chevron-down text-brand-light transition-transform duration-300 flex-shrink-0"></i>
+                    </button>
+                    <div class="accordion-content px-4 md:px-6 bg-white/5">
+                        <p class="py-4 text-gray-400 text-sm" data-i18n="faq_6_a">WhatsApp, Instagram, Facebook, Telegram, Google Sheets, Airtable, müxtəlif CRM-lər və e-poçt sistemləri daxil olmaqla onlarla platforma ilə.</p>
+                    </div>
+                </div>
+                <div class="glass rounded-2xl overflow-hidden reveal">
+                    <button class="w-full px-4 md:px-6 py-4 md:py-5 text-left flex justify-between items-center focus:outline-none" onclick="toggleAccordion(this)">
+                        <span class="font-bold text-sm md:text-base pr-4" data-i18n="faq_7_q">Sistemi təhvil almamışdan əvvəl test edə bilərəm?</span>
+                        <i class="fa-solid fa-chevron-down text-brand-light transition-transform duration-300 flex-shrink-0"></i>
+                    </button>
+                    <div class="accordion-content px-4 md:px-6 bg-white/5">
+                        <p class="py-4 text-gray-400 text-sm" data-i18n="faq_7_a">Əlbəttə. Layihə tam təhvil verilməzdən əvvəl test mühitində sizinlə birlikdə yoxlanılır və təsdiqiniz alınır.</p>
+                    </div>
+                </div>
+                <div class="glass rounded-2xl overflow-hidden reveal">
+                    <button class="w-full px-4 md:px-6 py-4 md:py-5 text-left flex justify-between items-center focus:outline-none" onclick="toggleAccordion(this)">
+                        <span class="font-bold text-sm md:text-base pr-4" data-i18n="faq_8_q">Sistemdə xəta yaransa necə olacaq?</span>
+                        <i class="fa-solid fa-chevron-down text-brand-light transition-transform duration-300 flex-shrink-0"></i>
+                    </button>
+                    <div class="accordion-content px-4 md:px-6 bg-white/5">
+                        <p class="py-4 text-gray-400 text-sm" data-i18n="faq_8_a">Biz müştərilərimizə təhvil verdikdən sonra da texniki dəstək göstəririk. Hər hansı texniki fasilə anında komandamız tərəfindən həll edilir.</p>
+                    </div>
+                </div>
+                <div class="glass rounded-2xl overflow-hidden reveal">
+                    <button class="w-full px-4 md:px-6 py-4 md:py-5 text-left flex justify-between items-center focus:outline-none" onclick="toggleAccordion(this)">
+                        <span class="font-bold text-sm md:text-base pr-4" data-i18n="faq_9_q">Nəticələri necə izləyə biləcəyəm?</span>
+                        <i class="fa-solid fa-chevron-down text-brand-light transition-transform duration-300 flex-shrink-0"></i>
+                    </button>
+                    <div class="accordion-content px-4 md:px-6 bg-white/5">
+                        <p class="py-4 text-gray-400 text-sm" data-i18n="faq_9_a">Sizə xüsusi bir məlumat paneli (dashboard) və ya cədvəl təqdim olunacaq ki, oradan gələn müştəriləri və satışları canlı izləyə biləsiniz.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-black border-t border-white/10 pt-12 md:pt-16 pb-8 px-4">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6 md:gap-8 mb-10 md:mb-12">
+                <div class="text-center md:text-left">
+                    <h3 class="text-xl md:text-2xl font-bold text-white mb-2">maga solutions</h3>
+                    <p class="text-gray-500 text-sm">Azərbaycan, Bakı</p>
+                    <p class="text-gray-500 text-sm mt-1">+994 99 878 97 99</p>
+                </div>
+                <div class="flex gap-4 md:gap-6">
+                    <a href="https://instagram.com/magasolutions.az" target="_blank" class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-gray-400 hover:bg-brand-light hover:text-white hover:border-brand-light transition duration-300">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+                    <a href="https://www.facebook.com/profile.php?id=61587369526151" target="_blank" class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-gray-400 hover:bg-brand-light hover:text-white hover:border-brand-light transition duration-300">
+                        <i class="fa-brands fa-facebook-f"></i>
+                    </a>
+                    <a href="mailto:info@magasolutions.az" class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-gray-400 hover:bg-brand-light hover:text-white hover:border-brand-light transition duration-300">
+                        <i class="fa-solid fa-envelope"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="border-t border-white/5 pt-6 md:pt-8 text-center text-gray-600 text-sm">
+                &copy; 2026 Maga Solutions. Bütün hüquqlar qorunur.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobil Menyu Funksiyası
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            if(menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                menu.classList.add('flex');
+            } else {
+                menu.classList.add('hidden');
+                menu.classList.remove('flex');
+            }
+        }
+
+        // Scroll Animation
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Accordion
+        function toggleAccordion(button) {
+            const content = button.nextElementSibling;
+            const icon = button.querySelector('i');
+            document.querySelectorAll('.accordion-content').forEach(el => {
+                if(el !== content) {
+                    el.classList.remove('open');
+                    el.style.maxHeight = null;
+                    el.previousElementSibling.querySelector('i').style.transform = 'rotate(0deg)';
+                }
+            });
+            if (content.classList.contains('open')) {
+                content.classList.remove('open');
+                content.style.maxHeight = null;
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                content.classList.add('open');
+                content.style.maxHeight = content.scrollHeight + "px";
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        // --- LANGUAGES / DİL TƏNZİMLƏMƏLƏRİ ---
+        const translations = {
+            az: {
+                page_title: "Maga Solutions | AI Avtomatlaşdırma Agentliyi",
+                nav_about: "Haqqımızda",
+                nav_why: "Niyə Biz?",
+                nav_services: "Həllər",
+                nav_contact: "Əlaqə",
+                hero_title_1: "Biznesinizi",
+                hero_highlight: "Süni İntellektlə",
+                hero_title_2: "Böyüdün.",
+                hero_desc: "Rutin işləri bizə tapşırın, siz strategiyaya fokuslanın. Maga Solutions sizin biznesinizi 24/7 işləyən bir sistemə çevirir.",
+                hero_btn_1: "Pulsuz Konsultasiya",
+                hero_btn_2: "Xidmətləri Kəşf Et",
+                about_title: "Biz Kimik?",
+                about_p1: "Maga Solutions, Azərbaycanda bizneslərin rəqəmsal transformasiyasını sürətləndirmək üçün yaradılmış yeni nəsil texnologiya agentliyidir.",
+                about_p2: "Biz sadəcə kod yazmırıq. Biz sizin biznesinizin axsadığı nöqtələri tapır, Antigravity və n8n kimi qabaqcıl alətlərlə o boşluqları doldururuq.",
+                stat_1: "Sistem İşləkliyi",
+                stat_2: "Məxfilik",
+                stat_3: "Nəticəyə Zəmanət",
+                stat_4: "Tamamlanmış Proyekt",
+                pain_title: "Problem və Həll",
+                pain_subtitle: "Biznesinizdəki problemləri dəqiq həllərlə aradan qaldırırıq.",
+                pain_head: "Sizin Problemlər",
+                pain_1_t: "Yüksək İşçi Xərcləri",
+                pain_1_d: "Rutin işləri görmək üçün əlavə işçilərə yüksək maaşlar ödəyirsiniz.",
+                pain_2_t: "Müştəri İtkisi",
+                pain_2_d: "Mesajlara və zənglərə gec cavab verildiyi üçün müştərilər rəqiblərə üz tutur.",
+                pain_3_t: "İnsan Xətaları",
+                pain_3_d: "Məlumatların daxil edilməsində, fakturalarda və təqiblərdə unudulmalar olur.",
+                pain_4_t: "İş Saatı Limitləri",
+                pain_4_d: "Komandanız yorulur, fasiləyə və istirahət günlərinə ehtiyac duyur.",
+                pain_5_t: "İdarəetmə Xaosu",
+                pain_5_d: "Biznesi böyütmək istəyərkən əməliyyatların çoxalması sistemi çökdürür.",
+                pain_6_t: "Gecikən Ödənişlər",
+                pain_6_d: "Müştərilərə borcları xatırlatmaq unudulur, nağd pul axını pozulur.",
+                gain_head: "Maga Solutions Həlli",
+                gain_1_t: "Xərclərin Optimizasiyası",
+                gain_1_d: "AI agentlər tək bir maaşdan qat-qat ucuz qiymətə 3 nəfərin işini görür.",
+                gain_2_t: "Anında Cavablandırma",
+                gain_2_d: "Ağıllı botlar hər bir müştəriyə saniyələr içində cavab verir və satışı bağlayır.",
+                gain_3_t: "İnsan Xətalarının 0-a Endirilməsi",
+                gain_3_d: "Avtomatlaşdırılmış sistemlər 100% dəqiqliklə işləyir, heç nə unudulmur.",
+                gain_4_t: "AI Yorulmur, Fasiləyə Ehtiyac Duymur",
+                gain_4_d: "Sisteminiz 24/7 işləyir, bayramlarda və ya gecə saatlarında belə dayanmır.",
+                gain_5_t: "Biznes Böyütmək Üçün Fürsət",
+                gain_5_d: "Siz yalnız strategiyaya fokuslanırsınız, sistem artan tələbatı asanlıqla idarə edir.",
+                gain_6_t: "Ödənişlər Vaxtında Yığılır",
+                gain_6_d: "Fakturalar avtomatik göndərilir və müştərilərə xatırlatmalar vaxtında edilir.",
+                srv_title: "Xaosdan Sistemə Keçid",
+                srv_subtitle: "Biznesinizi köhnə üsullarla idarə etməyi dayandırın.",
+                s1_t: "AI Agentlər",
+                s1_d: "Müştərilərinizlə 3 saniyə ərzində əlaqə quran, sualları cavablandıran və satış edən ağıllı köməkçilər.",
+                s2_t: "Workflow Avtomatlaşdırma",
+                s2_d: "Fakturaların göndərilməsi, e-mail marketinq və ya cədvəl yeniləmələri – hamısı avtomatik.",
+                s3_t: "CRM İnteqrasiyası",
+                s3_d: "Müştəri məlumatlarını itirməyin. Leadlərin haradan gəldiyini və nə istədiyini tək paneldən izləyin.",
+                tech_title: "İstifadə Etdiyimiz Texnologiyalar",
+                faq_title: "Tez-Tez Verilən Suallar",
+                faq_1_q: "Mənim biznesim üçün uyğundurmu?",
+                faq_1_a: "Bəli, istər kiçik kurs, istər restoran, istərsə də onlayn mağaza olun. Təkrarlanan işləriniz varsa, avtomatlaşdırma sizə vaxt və pul qazandıracaq.",
+                faq_2_q: "Qiymətlər necədir?",
+                faq_2_a: "Biz paket və fərdi həllər təklif edirik. İlk konsultasiya tamamilə pulsuzdur, orada sizin ehtiyacınıza uyğun qiymət təyin olunur.",
+                faq_3_q: "Quraşdırma nə qədər vaxt aparır?",
+                faq_3_a: "Sadə botlar üçün 2-3 gün, kompleks CRM sistemləri üçün isə 7-14 gün tələb oluna bilər.",
+                faq_4_q: "Məlumatlarım təhlükəsizdirmi?",
+                faq_4_a: "Əlbəttə! Bütün müştəri məlumatları rəsmi API-lər vasitəsilə şifrələnərək ötürülür və 100% məxfilik qorunur.",
+                faq_5_q: "Texniki biliyə ehtiyacım varmı?",
+                faq_5_a: "Xeyr. Biz bütün texniki quraşdırmanı və idarəetməni öz üzərimizə götürürük. Sizə yalnız hazır sistemi istifadə etmək qalır.",
+                faq_6_q: "Hansı platformalarla inteqrasiya edirsiniz?",
+                faq_6_a: "WhatsApp, Instagram, Facebook, Telegram, Google Sheets, Airtable, müxtəlif CRM-lər və e-poçt sistemləri daxil olmaqla onlarla platforma ilə.",
+                faq_7_q: "Sistemi təhvil almamışdan əvvəl test edə bilərəm?",
+                faq_7_a: "Əlbəttə. Layihə tam təhvil verilməzdən əvvəl test mühitində sizinlə birlikdə yoxlanılır və təsdiqiniz alınır.",
+                faq_8_q: "Sistemdə xəta yaransa necə olacaq?",
+                faq_8_a: "Biz müştərilərimizə təhvil verdikdən sonra da texniki dəstək göstəririk. Hər hansı texniki fasilə anında komandamız tərəfindən həll edilir.",
+                faq_9_q: "Nəticələri necə izləyə biləcəyəm?",
+                faq_9_a: "Sizə xüsusi bir məlumat paneli (dashboard) və ya cədvəl təqdim olunacaq ki, oradan gələn müştəriləri və satışları canlı izləyə biləsiniz."
+            },
+            en: {
+                page_title: "Maga Solutions | AI Automation Agency",
+                nav_about: "About Us",
+                nav_why: "Why Us?",
+                nav_services: "Solutions",
+                nav_contact: "Contact",
+                hero_title_1: "Grow Your Business",
+                hero_highlight: "With AI",
+                hero_title_2: "Automation.",
+                hero_desc: "Outsource routine tasks to us, focus on strategy. Maga Solutions turns your business into a system that works 24/7.",
+                hero_btn_1: "Free Consultation",
+                hero_btn_2: "Discover Services",
+                about_title: "Who Are We?",
+                about_p1: "Maga Solutions is a next-generation tech agency designed to accelerate digital transformation for businesses in Azerbaijan.",
+                about_p2: "We don't just write code. We find the bottlenecks in your business and fill those gaps with advanced tools like Antigravity and n8n.",
+                stat_1: "System Uptime",
+                stat_2: "Privacy",
+                stat_3: "Result Guarantee",
+                stat_4: "Projects Completed",
+                pain_title: "Problem vs Solution",
+                pain_subtitle: "We eliminate your business problems with precise solutions.",
+                pain_head: "Your Problems",
+                pain_1_t: "High Labor Costs",
+                pain_1_d: "You pay high salaries to extra employees just for doing routine tasks.",
+                pain_2_t: "Customer Churn",
+                pain_2_d: "Customers turn to competitors due to delayed responses to messages and calls.",
+                pain_3_t: "Human Errors",
+                pain_3_d: "Data entry mistakes, forgotten invoices, and missed follow-ups happen often.",
+                pain_4_t: "Working Hour Limits",
+                pain_4_d: "Your team gets tired, needs breaks, and requires days off.",
+                pain_5_t: "Management Chaos",
+                pain_5_d: "When trying to scale, the increase in operations collapses the system.",
+                pain_6_t: "Delayed Payments",
+                pain_6_d: "Reminding customers about debts gets forgotten, disrupting cash flow.",
+                gain_head: "Maga Solutions Solution",
+                gain_1_t: "Cost Optimization",
+                gain_1_d: "AI agents do the work of 3 people at a fraction of a single salary.",
+                gain_2_t: "Instant Response",
+                gain_2_d: "Smart bots reply to every customer in seconds and close the sale.",
+                gain_3_t: "Elimination of Human Errors",
+                gain_3_d: "Automated systems work with 100% accuracy, nothing is forgotten.",
+                gain_4_t: "AI Doesn't Tire or Need Breaks",
+                gain_4_d: "Your system works 24/7, never stopping even on holidays or at night.",
+                gain_5_t: "Opportunity to Scale",
+                gain_5_d: "You focus purely on strategy, while the system easily handles increased demand.",
+                gain_6_t: "Payments Collected on Time",
+                gain_6_d: "Invoices are sent automatically, and timely reminders are made to customers.",
+                srv_title: "From Chaos to System",
+                srv_subtitle: "Stop managing your business with old methods.",
+                s1_t: "AI Agents",
+                s1_d: "Smart assistants that connect with your customers in 3 seconds, answer questions, and make sales.",
+                s2_t: "Workflow Automation",
+                s2_d: "Invoice sending, email marketing, or spreadsheet updates – all automatic.",
+                s3_t: "CRM Integration",
+                s3_d: "Don't lose customer data. Track where leads come from and what they want from a single panel.",
+                tech_title: "Technologies We Use",
+                faq_title: "Frequently Asked Questions",
+                faq_1_q: "Is it suitable for my business?",
+                faq_1_a: "Yes, whether you are a small course, a restaurant, or an online store. If you have repetitive tasks, automation will save you time and money.",
+                faq_2_q: "What are the prices?",
+                faq_2_a: "We offer package and individual solutions. The first consultation is completely free, where a price suitable for your needs is determined.",
+                faq_3_q: "How long does installation take?",
+                faq_3_a: "2-3 days for simple bots, and 7-14 days for complex CRM systems.",
+                faq_4_q: "Is my data secure?",
+                faq_4_a: "Absolutely! All customer data is transmitted encrypted via official APIs, ensuring 100% privacy.",
+                faq_5_q: "Do I need technical knowledge?",
+                faq_5_a: "No. We handle all technical setup and management. You just need to use the ready system.",
+                faq_6_q: "What platforms do you integrate with?",
+                faq_6_a: "Dozens of platforms including WhatsApp, Instagram, Facebook, Telegram, Google Sheets, Airtable, various CRMs, and email systems.",
+                faq_7_q: "Can I test the system before delivery?",
+                faq_7_a: "Of course. Before final delivery, the project is tested together with you in a test environment to get your approval.",
+                faq_8_q: "What happens if there's a system error?",
+                faq_8_a: "We provide ongoing technical support after delivery. Any technical downtime is instantly resolved by our team.",
+                faq_9_q: "How can I track the results?",
+                faq_9_a: "You will be provided with a dedicated dashboard or spreadsheet where you can track incoming customers and sales live."
+            }
+        };
+
+        function setLanguage(lang) {
+            document.querySelectorAll("[data-i18n]").forEach(element => {
+                const key = element.getAttribute("data-i18n");
+                if (translations[lang][key]) {
+                    element.innerHTML = translations[lang][key];
+                }
+            });
+            
+            // Toggle Button Styles (Desktop & Mobile)
+            if (lang === 'az') {
+                document.getElementById('btn-az').classList.replace('text-gray-400', 'text-white');
+                document.getElementById('btn-en').classList.replace('text-white', 'text-gray-400');
+                document.getElementById('btn-az-mob').classList.replace('text-gray-400', 'text-white');
+                document.getElementById('btn-en-mob').classList.replace('text-white', 'text-gray-400');
+            } else {
+                document.getElementById('btn-en').classList.replace('text-gray-400', 'text-white');
+                document.getElementById('btn-az').classList.replace('text-white', 'text-gray-400');
+                document.getElementById('btn-en-mob').classList.replace('text-gray-400', 'text-white');
+                document.getElementById('btn-az-mob').classList.replace('text-white', 'text-gray-400');
+            }
+        }
+    </script>
+</body>
+</html>
